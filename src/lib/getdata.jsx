@@ -13,7 +13,7 @@ export async function getLocalData() {
 //console.log(imgsInDir);
   const jsonsInDir = fs.readdirSync('src/lib/data').filter(file => path.extname(file) === '.json');
   
-  //console.log(imgsInDir);
+  //console.log(jsonsInDir);
 
   for (let file of jsonsInDir) {
     file = 'src/lib/data/' + file;

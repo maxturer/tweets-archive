@@ -1,4 +1,16 @@
-export default function Card({name, handle, content, favorites, quotes, replies, retweets, date}) {
+import Image from 'next/image'
+
+export default function Card({name, handle, content, photos, favorites, quotes, replies, retweets, date}) {
+
+    function Render({imagesToRender}) {
+        if (imagesToRender[0] !== null) {
+            imagesToRender.forEach((el) => {
+                console.log(el);
+                return <Image src={el} alt="img" />
+            })
+        }
+    }
+        
     return (
           <div className="tweet p-3 bg-white">
             <div className="user-details p-1">
@@ -6,6 +18,7 @@ export default function Card({name, handle, content, favorites, quotes, replies,
             </div>
             <div className="tweet-content p-1">
               <p>{content}</p>
+              <Render imagesToRender={photos} />
             </div>
             <div className="tweet-details p-1">
               <p>
