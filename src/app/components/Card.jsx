@@ -1,14 +1,16 @@
-import Image from 'next/image'
+import Image from 'next/image';
 
 export default function Card({name, handle, content, photos, favorites, quotes, replies, retweets, date}) {
 
     function Render({imagesToRender}) {
-        if (imagesToRender[0] !== null) {
-            imagesToRender.forEach((el) => {
-                console.log(el);
-                return <Image src={el} alt="img" />
-            })
+        if (imagesToRender.length > 1) {
+          const key = imagesToRender[0];
+          const imgs = imagesToRender[1];
+          for (let i = 0; i < imgs.length; i++) {
+            return <Image key={`${key}-${i.toString()}`} src={imgs[i]} alt="img" width='0' height='0' sizes="100%" className="w-full h-auto" />
+          }
         }
+        return;
     }
         
     return (
@@ -18,7 +20,9 @@ export default function Card({name, handle, content, photos, favorites, quotes, 
             </div>
             <div className="tweet-content p-1">
               <p>{content}</p>
-              <Render imagesToRender={photos} />
+              <div className="photo-wrap w-full max-w-90">
+                <Render imagesToRender={photos} />
+              </div>
             </div>
             <div className="tweet-details p-1">
               <p>
