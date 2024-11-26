@@ -1,33 +1,33 @@
 //=========== To fetch data locally
 import fs from 'fs';
 import fsPromises from 'fs/promises';
-import path from 'path';
 
 export async function getLocalData() {
   // Get the path of the json file
- // const filePath = path.join(process.cwd(), 'src/lib/data/twitter_ixerfaded_1386643628575973377_1.jpg.json');
   let allData = [];
 
-
-  const imgsInDir = fs.readdirSync('src/lib/data').filter(file => path.extname(file) === '.jpg');
-//console.log(imgsInDir);
-  const jsonsInDir = fs.readdirSync('src/lib/data').filter(file => path.extname(file) === '.json');
-  
-  //console.log(jsonsInDir);
+  const jsonsInDir = fs.readdirSync('src/lib/data');
 
   for (let file of jsonsInDir) {
     file = 'src/lib/data/' + file;
-    // const fileData = fs.readFileSync(file);
+
     const jsonData = await fsPromises.readFile(file);
-    const objectData = JSON.parse(jsonData);
+
+    // the ids here are numbers that are too large and get rounded, turning all instances to strings for file name matching purposes
+    const objectData = JSON.parse(jsonData, (key, value, context) => {
+      if (key === 'tweet_id' ||
+          key === 'conversation_id' ||
+          key === 'id'
+      ) {
+        return context.source.toString();
+      }
+      return value;
+    });
     allData.push(objectData);
   }
-
-  // filtering posts to remove duplicates (hopefully not going to hurt later)
-
-  const data = allData.filter((item, index, obj) =>
-    obj.indexOf(item) && obj.lastIndexOf(item)
-  );
+  
+  // remove duplicates (metadata files, etc)
+  const data = Array.from([...(new Set(allData.map(e => JSON.stringify(e))))].map(e => JSON.parse(e)));
 
   return data;
 }

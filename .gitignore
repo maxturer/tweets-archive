@@ -26,6 +26,8 @@
 
 # data
 /src/lib/data
+public/img/
+src/lib/data copy
 
 # debug
 npm-debug.log*
